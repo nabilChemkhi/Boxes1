@@ -1,0 +1,155 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-items {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 80px;
+  height: 80px;
+  background-color: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-item:hover {
+  background-color: #ddd;
+  transform: scale(1.05);
+}
+
+.nav-item.selected {
+  background-color: #b3d7ff;
+}
+
+.box-item {
+  background-color: #e0f7fa;
+}
+
+/* .option-item {
+  background-color: #ffe0b2;
+} */
+
+.option-item.highlighted {
+  background-color: #ffcc80;
+  border: 2px solid #ff9800;
+}
+
+.box-index,
+.option-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 20px;
+  background-color: #bdbdbd;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 4px;
+  position: absolute;
+}
+
+.box-index {
+  top: -10px;
+  left: calc(50% - 15px);
+}
+
+.option-value {
+  bottom: -10px;
+  left: calc(50% - 15px);
+}
+
+.box-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.option-item {
+  background-color: #ffe0b2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.sum-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* Space between result and button */
+  width: 80px; /* Same width as box items */
+  height: 100px; /* Increased height to fit both content and button */
+  background-color: #d7ffd9;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #2e7d32;
+  position: relative;
+  box-sizing: border-box; /* Include padding and borders in width and height */
+}
+
+.sum-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-grow: 1; /* Allows the content to fill the available space */
+}
+
+.sum-title {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.sum-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.reset-button {
+  width: 100%; /* Full width of the sum box */
+  height: 30px;
+  background-color: #ffb3b3;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #c62828;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  position: absolute;
+  bottom: 0; /* Positioned at the bottom of the sum box */
+  left: 0;
+  box-sizing: border-box; /* Ensure the button size includes padding and borders */
+
+  
+}

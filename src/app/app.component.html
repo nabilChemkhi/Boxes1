@@ -1,2 +1,48 @@
-<p>app works!</p>
-<div>{{ title }}</div>
+<div class="container">
+  <!-- Boxes Navbar -->
+  <nav class="navbar boxes-navbar">
+    <div class="nav-items">
+      <div
+        class="nav-item box-item"
+        *ngFor="let box of boxes; let i = index"
+        (click)="selectBox(i)"
+        [class.selected]="selectedBox === i"
+      >
+        <!-- Small rectangle at the top for the box index -->
+        <div class="box-index">{{ i + 1 }}</div>
+        <!-- Main content of the box -->
+        <div class="box-content">
+          {{ selectedOptions[i]?.text || box }}
+        </div>
+        <!-- Small rectangle at the bottom for the option value -->
+        <div class="option-value">
+          {{ selectedOptions[i]?.value || '---' }}
+        </div>
+      </div>
+
+      <!-- Display the sum of all selected options' values -->
+      <div class="nav-item sum-display">
+        <div class="sum-content">
+          <div class="sum-title">Total Sum:</div>
+          <div class="sum-value">{{ totalSum }}</div>
+        </div>
+        <!-- Reset button -->
+        <button class="reset-button" (click)="resetSelections()">Reset</button>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Options Navbar (only show when a box is selected) -->
+  <nav class="navbar options-navbar" *ngIf="selectedBox !== null">
+    <div class="nav-items">
+      <div
+        class="nav-item option-item"
+        *ngFor="let option of options"
+        (click)="selectOption(option)"
+        [class.highlighted]="isOptionSelected(option)"
+      >
+        {{ option.text }}
+      </div>
+    </div>
+  </nav>
+</div>

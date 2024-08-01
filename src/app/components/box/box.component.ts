@@ -8,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './box.component.css'
 })
 export class BoxComponent {
+  selectedOption: string | null = null;
+  selectBox() {}
 
 }
