@@ -4,7 +4,7 @@
     <div class="nav-items">
       <div
         class="nav-item box-item"
-        *ngFor="let box of boxes; let i = index"
+        *ngFor="let box of boxes$ | async; let i = index"
         (click)="selectBox(i)"
         [class.selected]="selectedBox === i"
       >
@@ -12,11 +12,11 @@
         <div class="box-index">{{ i + 1 }}</div>
         <!-- Main content of the box -->
         <div class="box-content">
-          {{ selectedOptions[i]?.text || box }}
+          {{ box.selectedOption?.text || 'Box ' + (i + 1) }}
         </div>
         <!-- Small rectangle at the bottom for the option value -->
         <div class="option-value">
-          {{ selectedOptions[i]?.value || '---' }}
+          {{ box.selectedOption?.value || '---' }}
         </div>
       </div>
 
@@ -31,12 +31,12 @@
       </div>
     </div>
   </nav>
-  
+
   <!-- Options Navbar (only show when a box is selected) -->
   <nav class="navbar options-navbar" *ngIf="selectedBox !== null">
     <div class="nav-items">
       <div
-        class="nav-item option-item"
+        class="nav-item option-item option-content"
         *ngFor="let option of options"
         (click)="selectOption(option)"
         [class.highlighted]="isOptionSelected(option)"
@@ -46,3 +46,6 @@
     </div>
   </nav>
 </div>
+
+
+<app-box></app-box>

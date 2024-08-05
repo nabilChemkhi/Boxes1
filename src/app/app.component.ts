@@ -2,119 +2,105 @@ import { CommonModule } from '@angular/common';
 import { ApplicationRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, inject } from '@angular/core';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { BoxComponent } from './components/box/box.component';
+import { Box, Option } from './models/model';
+import { OptionsService } from './services/options.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BoxComponent,
+  imports: [BoxComponent,RouterOutlet,
     CommonModule, RouterModule,RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-//title = 'Boxes';
-//cdr=inject(ChangeDetectorRef)
+
+cdr=inject(ChangeDetectorRef)
+optionService=inject(OptionsService);
 
 boxText= "Select Option"
-
-
-boxes = Array.from({ length: 10 }, (_, i) => `Box ${i + 1}`);
-
-// Hardcoded array of options with associated values
-options = Array.from({ length: 5 }, (_, i) => ({
-  text: `Option ${i + 1}`,
-  value: i + 10.3, // Example associated value
-}));
-
-// State to keep track of selected options and the selected box
-selectedOptions: ({ text: string; value: number } | null)[] = Array(10).fill(null);
 selectedBox: number | null = null;
+totalSum: number = 0;
 
-// Handler to update the selected box
-selectBox(index: number) {
+
+boxes$: Observable<Box[]>;
+
+options: Option[] = [
+  { id:1, text: 'H', value: 1.9 },
+  { id:2, text: '5.', value: 2.7 },
+  { id:3, text: '--<', value: 3.8 },
+  { id:4, text: '-O', value: 4.2 },
+  { id:5, text: '4.', value: 4.6 },
+  { id:6, text: '---', value: 6.4 },
+  { id:7, text: '6.', value: 6.6 },
+  { id:8, text: '-/', value: 3.2 },
+  { id:9, text: '(', value: 8.8 },
+  { id:10, text: '-1o', value: 9.2 },
+  { id:11, text: '2--<', value: 3.6 },
+  { id:12, text: '-ox', value: 6.2 },
+  
+];
+
+constructor(){
+  this.boxes$ = this.optionService.boxes$;
+}
+
+ngOnInit(): void {
+  // Subscribe to boxes$ to calculate the initial total sum
+  this.boxes$.subscribe((boxes) => this.calculateTotalSum(boxes));
+}
+
+// Select a box
+selectBox(index: number): void {
   this.selectedBox = index;
 }
 
-// Handler to update the selected option
-selectOption(option: { text: string; value: number }) {
+// Select an option for the current box
+selectOption(option: Option): void {
   if (this.selectedBox !== null) {
-    this.selectedOptions[this.selectedBox] = option;
+    // Update selection via the service
+    this.optionService.updateSelection(this.selectedBox, option);
 
-    // Automatically select the next box if it's not the last one
-    if (this.selectedBox < this.boxes.length - 1) {
-      this.selectedBox++;
-    }
-    this.calculateTotalSum(); // Recalculate the sum
-
+    // Automatically select the next box, if available
+    this.selectedBox = Math.min(this.selectedBox + 1, 9);
   }
-  
 }
 
-// Helper to check if an option is selected for the current box
-isOptionSelected(option: { text: string; value: number }): boolean {
-  return (
-    this.selectedBox !== null &&
-    this.selectedOptions[this.selectedBox]?.text === option.text
-  );
-}
-
-// // Calculate the total sum of all selected options' values
-// get totalSum(): number {
-//   return this.selectedOptions.reduce((sum, option) => sum + (option?.value || 0), 0);
-// }
-
-totalSum: number = 0;
-
-// Method to calculate the total sum and ensure two decimal places
-calculateTotalSum() {
-  this.totalSum = this.boxes.reduce((sum, box, i) => {
-    const value = this.selectedOptions[i]?.value || 0;
-    return sum + value;
+// Calculate total sum
+calculateTotalSum(boxes: Box[]): void {
+  this.totalSum = boxes.reduce((sum, box) => {
+    return sum + (box.selectedOption?.value || 0);
   }, 0);
-
-  // Format to two decimal places
-  this.totalSum = parseFloat(this.totalSum.toFixed(2));
+  this.totalSum = parseFloat(this.totalSum.toFixed(2)); // Format sum to two decimal places
 }
 
- // Reset all selections and set the total sum to zero
- resetSelections() {
-  this.selectedOptions.fill(null);
+// Reset selections
+resetSelections(): void {
+  this.optionService.resetSelections(); // Reset selections via the service
   this.selectedBox = null;
-
-  this.calculateTotalSum(); // Recalculate the sum
-
 }
- 
-//  constructor() {}
 
-//  ngOnInit() {
-//    // Simulating an async operation
-//    setTimeout(() => {
-//      this.title = 'Data loaded';
-     
-//      // Manually trigger change detection
-//      //this.cdr.detectChanges();
-//      this.cdr.markForCheck();
-//    }, 2000);
-//  }
+// Check if an option is selected in the current box
+ isOptionSelected(option: Option): boolean {
+  // Since we can't directly access boxes$[index], subscribe to the observable and check the selected option
+  let isSelected = false;
 
-// constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {}
+  this.boxes$.subscribe((boxes) => {
+    if (
+      this.selectedBox !== null &&
+      boxes[this.selectedBox]?.selectedOption?.id === option.id
+    ) {
+      isSelected = true;
+    }
+  }).unsubscribe(); // Unsubscribe immediately after getting the result to prevent memory leaks
 
-//   ngOnInit() {
-//     console.log('Component initialized');
+  return isSelected;
+}
 
-//     // Simulate an async operation
-//     this.ngZone.runOutsideAngular(() => {
-//       setTimeout(() => {
-//         this.title = 'Data loaded';
 
-//         // Ensure change detection runs
-//         this.ngZone.run(() => {
-//           this.cdr.detectChanges(); // Manually trigger change detection
-//         });
-//       }, 2000);
-//     });
-//   }
+
+
 
 }

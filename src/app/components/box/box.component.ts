@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Box } from '../../models/model';
 
 @Component({
   selector: 'app-box',
@@ -8,7 +9,12 @@ import { Component } from '@angular/core';
   styleUrl: './box.component.css'
 })
 export class BoxComponent {
-  selectedOption: string | null = null;
-  selectBox() {}
+  @Input() box!: Box;
+  @Input() isSelected!: boolean;
+  @Output() selectBox = new EventEmitter<void>();
+
+  onSelectBox(): void {
+    this.selectBox.emit();
+  }
 
 }
