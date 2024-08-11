@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ApplicationRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, inject } from '@angular/core';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
-import { BoxComponent } from './components/box/box.component';
+
 import { Box, Option } from './models/model';
 import { OptionsService } from './services/options.service';
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BoxComponent,RouterOutlet,
+  imports: [RouterOutlet,
     CommonModule, RouterModule,RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
